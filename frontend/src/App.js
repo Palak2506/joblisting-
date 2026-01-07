@@ -8,8 +8,10 @@ function App() {
 
   const fetchJobs = async (searchLocation = "") => {
     const res = await axios.get(
-      `https://joblistingbackend-6pww.onrender.com/jobs?location=${searchLocation}`
+  `https://joblistingbackend-6pww.onrender.com/jobs?location=${searchLocation}&page=1&limit=10`
     );
+
+    setJobs(res.data.jobs); 
     setJobs(res.data);
     if (res.data.length > 0 && !selectedJob) {
       setSelectedJob(res.data[0]);
