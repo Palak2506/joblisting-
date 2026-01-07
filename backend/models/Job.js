@@ -4,7 +4,10 @@ const jobSchema = new mongoose.Schema({
   jobId: String,
   title: String,
   company: String,
-  location: String,
+  location: {
+    type: String,
+    index : true
+  },
   employment_type: String,
   experience: String,
   source: String,
@@ -15,6 +18,6 @@ const jobSchema = new mongoose.Schema({
   country: String,
   companytype: String,
   companyImageUrl: String
-}, { strict: false }); // 👈 IMPORTANT
+}, { strict: false }); 
 
 module.exports = mongoose.model("Job", jobSchema);

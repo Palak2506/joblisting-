@@ -5,18 +5,32 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { location } = req.query;
+    const { location, page = 1, limit = 10 } = req.query;
 
-    let filter = {};
+    const filter = {};
     if (location) {
       filter.location = { $regex: location, $options: "i" };
     }
 
-    const jobs = await Job.find(filter).sort({ postedDateTime: -1 });
-    res.json(jobs);
+    const skip = (page - 1) * limit;
+
+    const jobs = await Job.find(filter)
+      .sort({ postedDateTime: -1 })
+      .skip(Number(skip))
+      .limit(Number(limit));
+
+    const total = await Job.countDocuments(filter);
+
+    res.json({
+      totalJobs: total,
+      currentPage: Number(page),
+      totalPages: Math.ceil(total / limit),
+      jobs
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 module.exports = router;

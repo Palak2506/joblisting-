@@ -3,7 +3,7 @@ const Job = require("./models/Job");
 const rawData = require("./data/jobs.json");
 require("dotenv").config();
 
-// helper to safely extract MongoDB extended JSON values
+
 const getValue = (val) => {
   if (!val) return null;
 
@@ -42,6 +42,7 @@ mongoose
   .then(async () => {
     await Job.deleteMany();
     await Job.insertMany(cleanData);
+    console.log(`Total jobs to import: ${cleanData.length}`);
     console.log("Job data imported successfully");
     process.exit();
   })
